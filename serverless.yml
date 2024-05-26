@@ -1,0 +1,60 @@
+service: url-shortener
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: sa-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:*
+          Resource: "*"
+
+functions:
+  shortenUrl:
+    handler: src/functions/post-url.handler
+    events:
+      - http:
+          path: encurta_byx
+          method: post
+          cors: true
+  getUrl:
+    handler: src/functions/get-url.handler
+    events:
+      - http:
+          path: encurta_byx
+          method: get
+          cors: true    
+  redirect:
+    handler: src/functions/redirect-url.handler
+    events:
+      - http:
+          path: "{shortUrl}"
+          method: get
+          cors: true
+  getAccessLog:
+    handler: src/functions/get-access-log.handler
+    events:
+      - http:
+          path: access-log
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    UrlsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Urls
+        AttributeDefinitions:
+          - AttributeName: shortUrl
+            AttributeType: S
+        KeySchema:
+          - AttributeName: shortUrl
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
