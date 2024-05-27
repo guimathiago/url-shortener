@@ -27,7 +27,6 @@ Este é um projeto de encurtador de URL implementado em Node.js e Serverless Fra
 
    ```
    aws configure
-
    ```
 
 ## Testes
@@ -35,8 +34,10 @@ Este é um projeto de encurtador de URL implementado em Node.js e Serverless Fra
 Para executar os testes unitários, execute o seguinte comando:
 
 ```
-npm run test
+npm run test
 ```
+
+![image](https://github.com/ksguimaraes/url-shortener/assets/39937365/79d3aac9-fa9e-4bcc-8201-c705a0de222b)
 
 ## Implantação
 
@@ -83,9 +84,9 @@ sequenceDiagram
 
     Client->>API Gateway: GET /encurta_byx
     API Gateway->>Lambda: url-shortener-dev-getUrl
+    Lambda->>DynamoDB: Lista da tabela URLs
     Lambda-->>API Gateway: Retorna lista de URLs
     API Gateway-->>Client: Retorna lista de URLs
-    Lambda->>DynamoDB: Lista da tabela URLs
 ```
 
 - **Endpoint:** `GET /{shortUrl}`
@@ -103,10 +104,10 @@ participant DynamoDB
 
 Client->>API Gateway: GET /{shortUrl}
 API Gateway->>Lambda: url-shortener-dev-redirect
+Lambda->>DynamoDB: Lista da tabela URLs
+Lambda->>DynamoDB: Grava da tabela AccessLog
 Lambda-->>API Gateway: Redireciona a URL
 API Gateway-->>Client: Redireciona a URL
-Lambda->>DynamoDB: Lista da tabela URLs
-Lambda->>DynamoDB: Grava na tabela AccessLog
 ```
 
 - **Endpoint:** `GET /access-log`
@@ -122,7 +123,7 @@ participant DynamoDB
 
 Client->>API Gateway: GET /access-log
 API Gateway->>Lambda: url-shortener-dev-getAccessLog
+Lambda->>DynamoDB: Lista da tabela AccessLog
 Lambda-->>API Gateway: Retorna a lista de acessos
 API Gateway-->>Client: Retorna a lista de acessos
-Lambda->>DynamoDB: Lista da tabela AccessLog
 ```
