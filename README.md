@@ -37,7 +37,8 @@ Para executar os testes unitários, execute o seguinte comando:
 npm run test
 ```
 
-![image](https://github.com/ksguimaraes/url-shortener/assets/39937365/79d3aac9-fa9e-4bcc-8201-c705a0de222b)
+![image](https://github.com/guimathiago/url-shortener/assets/82674314/ccaa9f77-f89e-4819-a0dd-8debc4cf16de)
+
 
 ## Implantação
 
@@ -105,7 +106,7 @@ participant DynamoDB
 Client->>API Gateway: GET /{shortUrl}
 API Gateway->>Lambda: url-shortener-dev-redirect
 Lambda->>DynamoDB: Lista da tabela URLs
-Lambda->>DynamoDB: Grava da tabela AccessLog
+Lambda->>DynamoDB: Grava na tabela AccessLog
 Lambda-->>API Gateway: Redireciona a URL
 API Gateway-->>Client: Redireciona a URL
 ```
